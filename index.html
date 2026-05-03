@@ -961,6 +961,91 @@
     .timeline-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
+  /* ============ RING SECTION ============ */
+  .ring-section {
+    background: var(--cream);
+    padding: 8vh 7vw 10vh;
+    text-align: center;
+  }
+  .ring-photo {
+    width: min(70vw, 320px);
+    aspect-ratio: 3/4;
+    margin: 0 auto 1.6rem;
+    overflow: hidden;
+    border: 1px solid rgba(45, 58, 46, 0.15);
+    box-shadow: 0 22px 50px -22px rgba(45, 58, 46, 0.45);
+    background: #ddd;
+  }
+  .ring-photo img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: sepia(0.08) contrast(1.02);
+  }
+  .ring-caption {
+    margin-top: 1.4rem;
+  }
+  .ring-caption .smallcaps {
+    color: var(--green);
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0.18em;
+    font-size: 0.95rem;
+  }
+
+  /* ============ PRE-DINNER NOTE ============ */
+  .pre-dinner-note {
+    margin-top: 2.4rem;
+    padding: 1.6rem 1.4rem;
+    background: var(--cream-warm);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    position: relative;
+  }
+  .pre-dinner-note::before,
+  .pre-dinner-note::after {
+    content: '';
+    position: absolute;
+    width: 8px; height: 8px;
+    border: 1px solid var(--green);
+    opacity: 0.55;
+  }
+  .pre-dinner-note::before { top: 6px; left: 6px; border-right: none; border-bottom: none; }
+  .pre-dinner-note::after  { bottom: 6px; right: 6px; border-left: none; border-top: none; }
+
+  /* ============ MUTE BUTTON ============ */
+  .mute-btn {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(31, 44, 32, 0.82);
+    color: var(--cream-light);
+    border: 1px solid rgba(241, 232, 211, 0.18);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(16px);
+    transition: opacity 0.8s ease 1.4s, transform 0.8s ease 1.4s, background 0.2s;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+  }
+  .mute-btn.visible {
+    opacity: 0.88;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  .mute-btn:hover { opacity: 1; background: rgba(31, 44, 32, 1); }
+  .mute-btn svg { width: 20px; height: 20px; }
+  .mute-btn .icon-muted { display: none; }
+  .mute-btn.is-muted .icon-on { display: none; }
+  .mute-btn.is-muted .icon-muted { display: block; }
+
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -971,6 +1056,24 @@
 </style>
 </head>
 <body class="curtain-closed">
+
+<!-- ============ BACKGROUND MUSIC ============ -->
+<audio id="bgMusic" loop preload="auto" playsinline>
+  <source src="audio/song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ============ MUTE BUTTON ============ -->
+<button id="muteBtn" class="mute-btn" type="button" aria-label="Slå lyd til eller fra">
+  <svg class="icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M11 5 L6 9 H3 V15 H6 L11 19 V5 Z"/>
+    <path d="M15.5 8.5 Q17.5 12 15.5 15.5"/>
+    <path d="M18 6 Q21 12 18 18"/>
+  </svg>
+  <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M11 5 L6 9 H3 V15 H6 L11 19 V5 Z"/>
+    <path d="M16 9 L21 14 M21 9 L16 14"/>
+  </svg>
+</button>
 
 <!-- ============ CURTAIN OVERLAY ============ -->
 <div class="curtain-stage" id="curtainStage" role="button" tabindex="0" aria-label="Tryk for at åbne invitationen">
@@ -1043,6 +1146,16 @@
           en intim bryllupsfejring i Tirana.
         </p>
       </div>
+    </div>
+  </section>
+
+  <!-- ENGAGEMENT RING -->
+  <section class="ring-section section" data-reveal>
+    <div class="ring-photo">
+      <img src="images/ring.jpg" alt="Forlovelsesring">
+    </div>
+    <div class="ring-caption">
+      <span class="smallcaps">— Hun sagde ja —</span>
     </div>
   </section>
 
@@ -1246,7 +1359,7 @@
         Venligst bekræft jeres deltagelse.
       </p>
 
-      <div class="rsvp-deadline">Senest 10. juli 2026</div>
+      <div class="rsvp-deadline">Senest 10. juni 2026</div>
 
       <p class="rsvp-text" style="margin-bottom: 0.4rem;">Oplys venligst:</p>
       <ul class="rsvp-list">
@@ -1315,6 +1428,16 @@
         <span class="label">Morgenmad</span>
         <span class="value">Kl. 09.00 – 11.00</span>
       </div>
+
+      <div class="pre-dinner-note">
+        <span class="smallcaps" style="color: var(--green); display:block; text-align:center; margin-bottom: 0.6rem;">Fredag aften</span>
+        <p style="text-align: center; margin-bottom: 0.4rem; font-style: italic; color: var(--green-dark);">
+          Pre-wedding dinner for den danske familie
+        </p>
+        <p style="text-align: center; font-family: 'Playfair Display', serif; font-style: italic; color: var(--green); margin-bottom: 0;">
+          Fredag 9. oktober · kl. 19.00 – 22.00
+        </p>
+      </div>
     </div>
   </section>
 
@@ -1355,11 +1478,15 @@
       <span class="smallcaps">Sted &amp; oplevelse</span>
       <h3 class="guide-h">Udforsk Kazerma</h3>
       <p style="text-align: center;">
-        Kazerma er et historisk område med natur, bygninger og åbne landskaber.
-        Gæster er velkomne til at udforske området i eget tempo.
+        Kazerma er en tidligere militærkaserne, nænsomt transformeret til et sted,
+        hvor historie og natur smelter sammen.
+      </p>
+      <p style="text-align: center; margin-top: 1rem;">
+        Her mødes rå arkitektur og åbne landskaber med egne råvarer
+        og vinproduktion, som danner rammen om oplevelsen.
       </p>
       <p style="text-align: center; font-style: italic; margin-top: 1.4rem; color: var(--green);">
-        Vi glæder os til at dele weekenden med jer.
+        Området inviterer til at gå på opdagelse i eget tempo.
       </p>
     </div>
   </section>
@@ -1379,6 +1506,55 @@
 </main>
 
 <script>
+  /* ============ BACKGROUND MUSIC ============ */
+  const audio = document.getElementById('bgMusic');
+  const muteBtn = document.getElementById('muteBtn');
+
+  const SONG_START_AT = 6;          // start playback 6 seconds into the song
+  const TARGET_VOLUME = 0.55;       // final volume (0–1)
+  const FADE_DURATION_MS = 3200;    // fade-in duration
+
+  let userMuted = false;
+
+  function fadeInMusic() {
+    if (!audio) return;
+    try {
+      audio.currentTime = SONG_START_AT;
+    } catch (e) {
+      // some browsers throw if metadata isn't loaded yet — try again on canplay
+      audio.addEventListener('canplay', () => {
+        try { audio.currentTime = SONG_START_AT; } catch (_) {}
+      }, { once: true });
+    }
+    audio.volume = 0;
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        const start = performance.now();
+        function step(now) {
+          if (userMuted) return;
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / FADE_DURATION_MS, 1);
+          // ease-out
+          const eased = 1 - Math.pow(1 - progress, 2);
+          audio.volume = eased * TARGET_VOLUME;
+          if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }).catch(() => {
+        // autoplay blocked — show mute button anyway so user can tap it
+      });
+    }
+  }
+
+  muteBtn.addEventListener('click', () => {
+    userMuted = !userMuted;
+    audio.muted = userMuted;
+    muteBtn.classList.toggle('is-muted', userMuted);
+    muteBtn.setAttribute('aria-label', userMuted ? 'Slå lyd til' : 'Slå lyd fra');
+  });
+
   /* ============ CURTAIN OPEN ============ */
   const stage = document.getElementById('curtainStage');
   const body = document.body;
@@ -1387,6 +1563,9 @@
     if (stage.classList.contains('open')) return;
     stage.classList.add('open');
     body.classList.remove('curtain-closed');
+    fadeInMusic();
+    // show mute button after a short beat so it doesn't appear during animation
+    setTimeout(() => muteBtn.classList.add('visible'), 800);
     setTimeout(() => {
       stage.style.display = 'none';
       revealVisible();
